@@ -12,7 +12,7 @@ import net.hamza.ebankingbackend.exceptions.CustomerNotFoundException;
 import java.util.List;
 
 public interface BankAccountService {
-    Customer saveCustomer (Customer customer);
+    CustomerDTO saveCustomer (CustomerDTO customer);
     CurrentAccount saveCurrentBankAccount(double initialBalance, Long customerId, String currency, double overDraft) throws CustomerNotFoundException;
     SavingAccount saveSavingBankAccount(double initialBalance, Long customerId, String currency, double interestRate) throws CustomerNotFoundException;
     List<CustomerDTO> listCustomer();
@@ -22,4 +22,6 @@ public interface BankAccountService {
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
     List<BankAccount> bankAccountList();
+
+    CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
 }

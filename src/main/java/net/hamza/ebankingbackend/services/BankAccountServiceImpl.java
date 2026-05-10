@@ -14,6 +14,7 @@ import net.hamza.ebankingbackend.mappers.BankAccountMapperImpl;
 import net.hamza.ebankingbackend.repositories.AccountOperationRepository;
 import net.hamza.ebankingbackend.repositories.BankAccountRepository;
 import net.hamza.ebankingbackend.repositories.CustomerRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,9 +33,10 @@ public class BankAccountServiceImpl implements BankAccountService{
     private BankAccountMapperImpl mapper;
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving new customer");
-        Customer savedCustomer = customerRepository.save(customer);
+        Customer customer = mapper.fromCustomerDTO(customerDTO);
+        CustomerDTO savedCustomer = mapper.fromCustomer(customerRepository.save(customer));
         return savedCustomer;
     }
 
@@ -141,5 +143,12 @@ public class BankAccountServiceImpl implements BankAccountService{
     @Override
     public List<BankAccount> bankAccountList() {
         return bankAccountRepository.findAll();
+    }
+
+    @Override
+    public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException{
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer Not Found !!!"));
+            return mapper.fromCustomer(customer);
     }
 }

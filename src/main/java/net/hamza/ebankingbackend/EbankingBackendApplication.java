@@ -1,5 +1,6 @@
 package net.hamza.ebankingbackend;
 
+import net.hamza.ebankingbackend.dtos.CustomerDTO;
 import net.hamza.ebankingbackend.entities.*;
 import net.hamza.ebankingbackend.enums.AccountStatus;
 import net.hamza.ebankingbackend.enums.OperationType;
@@ -39,10 +40,10 @@ public class EbankingBackendApplication {
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService, BankAccountRepository bankAccountRepository){
         return args -> {
             Stream.of("Hassan","Imane","Mohamed").forEach(name->{
-                Customer customer = new Customer();
-                customer.setName(name);
-                customer.setEmail(name+"@gmail.com");
-                bankAccountService.saveCustomer(customer);
+                CustomerDTO customerDTO = new CustomerDTO();
+                customerDTO.setName(name);
+                customerDTO.setEmail(name+"@gmail.com");
+                bankAccountService.saveCustomer(customerDTO);
             });
             bankAccountService.listCustomer().forEach(customer->{
                 try {

@@ -18,8 +18,8 @@ public abstract class BankAccount {
     @Id
     private String id;
 
-    private Date createdAt;
     private double balance;
+    private Date createdAt;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;

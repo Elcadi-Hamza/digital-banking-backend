@@ -6,6 +6,7 @@ import net.hamza.ebankingbackend.enums.OperationType;
 import net.hamza.ebankingbackend.repositories.AccountOperationRepository;
 import net.hamza.ebankingbackend.repositories.BankAccountRepository;
 import net.hamza.ebankingbackend.repositories.CustomerRepository;
+import net.hamza.ebankingbackend.services.BankService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +24,12 @@ public class EbankingBackendApplication {
     }
 
     @Bean
+    CommandLineRunner commandLineRunner(BankService bankService) {
+        return args -> {
+            bankService.consulter();
+        };
+    }
+    //@Bean
     CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
         return args -> {
             //creating customers
@@ -72,33 +79,6 @@ public class EbankingBackendApplication {
                     accountOperation.setDescription("Descreption " + i);
                     accountOperationRepository.save(accountOperation);
                 }
-
-                BankAccount bankAccount = bankAccountRepository.findById("03630f41-f92f-4aac-a9ab-4ebed2f41703").orElse(null);
-                System.out.println("*********************************************************");
-                System.out.println(bankAccount.getId());
-                System.out.println(bankAccount.getBalance());
-                System.out.println(bankAccount.getStatus());
-                System.out.println(bankAccount.getCreatedAt());
-                System.out.println(bankAccount.getCustomer().getName());
-                //pour afficher le nom de la compte
-                System.out.println(bankAccount.getClass().getSimpleName());
-                if(bankAccount instanceof CurrentAccount) {
-                    System.out.println("OverDraft = " + ((CurrentAccount) bankAccount).getOverDraft());
-                } else if (bankAccount instanceof SavingAccount) {
-                    System.out.println("IntrestRate = " + ((SavingAccount) bankAccount).getInterestRate());
-                }
-                System.out.println("Operations : ");
-                final int[] i = {1};
-                bankAccount.getAccountOperations().forEach(operation -> {
-                    System.out.println("operation "+ i[0] + "===================== " );
-                    System.out.println(operation.getType());
-                    System.out.println(operation.getDate());
-                    System.out.println(operation.getAmount());
-                    System.out.println(operation.getDescription());
-                    i[0]++;
-                });
-
-                System.out.println("*********************************************************");
             });
         };
     }

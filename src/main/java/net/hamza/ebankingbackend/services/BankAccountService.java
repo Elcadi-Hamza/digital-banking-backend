@@ -1,5 +1,6 @@
 package net.hamza.ebankingbackend.services;
 
+import net.hamza.ebankingbackend.dtos.CustomerDTO;
 import net.hamza.ebankingbackend.entities.BankAccount;
 import net.hamza.ebankingbackend.entities.CurrentAccount;
 import net.hamza.ebankingbackend.entities.Customer;
@@ -14,7 +15,7 @@ public interface BankAccountService {
     Customer saveCustomer (Customer customer);
     CurrentAccount saveCurrentBankAccount(double initialBalance, Long customerId, String currency, double overDraft) throws CustomerNotFoundException;
     SavingAccount saveSavingBankAccount(double initialBalance, Long customerId, String currency, double interestRate) throws CustomerNotFoundException;
-    List<Customer> listCustomer();
+    List<CustomerDTO> listCustomer();
     BankAccount getBankAccount(String accountId) throws BankAccountNotFoundException;
     void debit(String accountId, double amount, String description) throws BankAccountNotFoundException;
     void credit(String accountId, double amount, String description);

@@ -3,17 +3,20 @@ package net.hamza.ebankingbackend.services;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.hamza.ebankingbackend.dtos.CustomerDTO;
 import net.hamza.ebankingbackend.entities.*;
 import net.hamza.ebankingbackend.enums.AccountStatus;
 import net.hamza.ebankingbackend.enums.OperationType;
 import net.hamza.ebankingbackend.exceptions.BalanceNotSufficientException;
 import net.hamza.ebankingbackend.exceptions.BankAccountNotFoundException;
 import net.hamza.ebankingbackend.exceptions.CustomerNotFoundException;
+import net.hamza.ebankingbackend.mappers.BankAccountMapperImpl;
 import net.hamza.ebankingbackend.repositories.AccountOperationRepository;
 import net.hamza.ebankingbackend.repositories.BankAccountRepository;
 import net.hamza.ebankingbackend.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +29,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     private CustomerRepository customerRepository;
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
+    private BankAccountMapperImpl mapper;
 
     @Override
     public Customer saveCustomer(Customer customer) {
@@ -75,9 +79,14 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public List<Customer> listCustomer() {
+    public List<CustomerDTO> listCustomer() {
         log.info("Loading customers");
-        return customerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        customers.stream().forEach(customer -> {
+            customerDTOS.add(mapper.fromCustomer(customer));
+        });
+        return customerDTOS;
     }
 
     @Override

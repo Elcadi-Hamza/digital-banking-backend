@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
-@DiscriminatorValue("CA")
+//@DiscriminatorValue("CA")
 @Data @NoArgsConstructor @AllArgsConstructor
 @NonNull
 
